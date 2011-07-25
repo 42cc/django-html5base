@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--[if IE 6 ]>    <html lang="ru" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="ru" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="ru" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="ru" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html lang="ru" class="no-js"> <!--<![endif]-->{% load static %}{% get_static_prefix as STATIC_URL %}
+<head>
+	<meta charset="utf-8">
+	<meta name="Charset" content="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<!--[if IE ]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<meta name="description" content="{%  block meta_desription %}{% endblock %}">
+	<meta name="keywords" content="{%  block meta_content %}{% endblock %}">
+	<title>{% block meta_title %}{% endblock %}</title>
+
+	<meta name="author" content="V. Tartynskiy, Urchin llc.">
+	<meta name="generator" content="Django engine">
+	<meta name="robots" content="index, follow">
+	<meta name="googlebot" content="index, follow">
+	<meta name="rating" content="General">
+
+	<link rel="shortcut icon" href="{{ STATIC_URL }}html5base/img/favicon.ico">
+	<link rel="apple-touch-icon" href="{{ STATIC_URL }}html5base/img/apple-touch-icon.png">
+
+	<link rel="stylesheet" href="{{ STATIC_URL }}html5base/css/reset.css">
+	{% block stylesheets %}
+	{% endblock %}
+
+	<script src="{{ STATIC_URL }}html5base/js/modernizr.js"></script>
+	<script src="{{ STATIC_URL }}html5base/js/jquery.js"></script>
+	<script src="{{ STATIC_URL }}html5base/js/selectivizr.js"></script>
+	<script src="{{ STATIC_URL }}html5base/js/swfobject.js"></script>
+	{% block javascripts %}
+	{% endblock %}
+
+	{% block htmladditional %}{% endblock %}
+
+</head>
+{% block global_content %}
+<body>
+
+</body>
+{% endblock %}
+</html>
