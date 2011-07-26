@@ -1,0 +1,6 @@
+include README
+include AUTHORS
+include LICENSE
+recursive-include html5base/static *
+recursive-include html5base/templates *
+recursive-include html5base/templatetags *
