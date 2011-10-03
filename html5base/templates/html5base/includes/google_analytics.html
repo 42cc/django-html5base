@@ -1,8 +1,8 @@
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', '{% block google_analytics_id %}0{% endblock %}']);
-  _gaq.push(['_setDomainName', '{% block google_analytics_site %}0{% endblock %}']);
+  _gaq.push(['_setAccount', '{{ id }}']);
+  _gaq.push(['_setDomainName', '{{ site }}']);
   _gaq.push(['_trackPageview']);
 
   (function() {

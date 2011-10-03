@@ -1,15 +1,10 @@
+{% load html5base_tags %}
 <!DOCTYPE html>
 <!--[if IE 6 ]>    <html lang="ru" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="ru" class="no-js ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html lang="ru" class="no-js ie8"> <![endif]-->
 <!--[if IE 9 ]>    <html lang="ru" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!-->
-{% block yandex_vrfy %}{% endblock %}
-{% block yandex_metrika_id %}{% endblock %}
-
-{% block google_vrfy %}{% endblock %}
-{% block google_analytics_id %}{% endblock %}
-{% block google_analytics_site %}{% endblock %}
 <html lang="ru" class="no-js"> <!--<![endif]-->{% load static %}{% get_static_prefix as STATIC_URL %}
 <head>
 	<meta charset="utf-8">
@@ -20,8 +15,11 @@
 
 	<meta name="description" content="{%  block meta_desription %}{% endblock %}">
 	<meta name="keywords" content="{%  block meta_keywords %}{% endblock %}">
-    {% include 'html5base/includes/yandex_webmaster.html' %}
-    {% include 'html5base/includes/google_webmaster.html' %}
+
+    {% google_webmaster %}
+    {% yandex_webmaster %}
+
+
 	<title>{% block meta_title %}{% endblock %}</title>
 
 	<meta name="author" content="V. Tartynskiy, Urchin llc.">
@@ -59,8 +57,9 @@
 	CFInstall.check({mode:'overlay'})
 })</script>
 <![endif]-->
-{% include 'html5base/includes/google_analytics.html' %}
-{% include 'html5base/includes/yandex_metrics.html' %}
+
+{% google_analytics %}
+{% yandex_metrics %}
 </body>
 
 </html>
