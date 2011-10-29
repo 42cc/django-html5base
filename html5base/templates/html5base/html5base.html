@@ -22,7 +22,6 @@
 
 	<title>{% block meta_title %}{% endblock %}</title>
 
-	<meta name="author" content="V. Tartynskiy, Urchin llc.">
 	<meta name="generator" content="Django engine">
 	<meta name="robots" content="index, follow">
 	<meta name="googlebot" content="index, follow">
@@ -45,7 +44,14 @@
 	{% block javascripts %}{% endblock %}
 
 	{% block htmladditional %}{% endblock %}
-
+    <script type="application/x-javascript">		//autoscroll down 4 iPhone//
+    addEventListener('load', function() {
+        setTimeout(hideAddressBar, 0);
+    }, false);
+    function hideAddressBar() {
+        window.scrollTo(0,1);
+    }
+    </script>
 </head>
 
 <body>
