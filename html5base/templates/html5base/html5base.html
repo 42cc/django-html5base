@@ -1,16 +1,14 @@
 {% load html5base_tags %}
-<!DOCTYPE html>
-<!--[if IE 6 ]>    <html lang="ru" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]>    <html lang="ru" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]>    <html lang="ru" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]>    <html lang="ru" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!-->
-<html lang="ru" class="no-js"> <!--<![endif]-->{% load static %}{% get_static_prefix as STATIC_URL %}
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->{% load static %}{% get_static_prefix as STATIC_URL %}
 <head>
 	<meta charset="utf-8">
 	<meta name="Charset" content="UTF-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<!--[if IE ]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<meta name="description" content="{%  block meta_desription %}{% endblock %}">
@@ -18,7 +16,7 @@
 
     {% google_webmaster %}
     {% yandex_webmaster %}
-
+    {% alexa %}
 
 	<title>{% block meta_title %}{% endblock %}</title>
 
@@ -44,14 +42,6 @@
 	{% block javascripts %}{% endblock %}
 
 	{% block htmladditional %}{% endblock %}
-    <script type="application/x-javascript">		//autoscroll down 4 iPhone//
-    addEventListener('load', function() {
-        setTimeout(hideAddressBar, 0);
-    }, false);
-    function hideAddressBar() {
-        window.scrollTo(0,1);
-    }
-    </script>
 </head>
 
 <body>

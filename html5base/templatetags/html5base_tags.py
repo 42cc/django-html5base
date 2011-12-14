@@ -15,6 +15,11 @@ def google_webmaster(context):
     context.update({'id': settings.DEFAULT_SETTINGS.get('google_vrfy')})
     return context
 
+@register.inclusion_tag('html5base/includes/alexa.html', takes_context=True)
+def alexa(context):
+    context.update({'id': settings.DEFAULT_SETTINGS.get('alexa_vrfy')})
+    return context
+
 @register.inclusion_tag('html5base/includes/yandex_metrics.html', takes_context=True)
 def yandex_metrics(context):
     context.update({'id': settings.DEFAULT_SETTINGS.get('yandex_metrika_id')})

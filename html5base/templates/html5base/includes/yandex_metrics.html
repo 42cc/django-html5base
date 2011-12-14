@@ -3,14 +3,12 @@
 (function(w, c) {
     (w[c] = w[c] || []).push(function() {
         try {
-            w.yaCounter10145809 = new Ya.Metrika({
-                id: {{ id }},
-                enableAll: true
-            });
+            w.yaCounter{{ id }} = new Ya.Metrika({id:{{ id }}, enableAll: true});
         }
         catch(e) { }
     });
 })(window, "yandex_metrika_callbacks");
 </script></div>
 <script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript" defer="defer"></script>
+<noscript><div><img src="//mc.yandex.ru/watch/{{ id }}" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
