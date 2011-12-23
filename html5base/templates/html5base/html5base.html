@@ -1,5 +1,4 @@
-{% load html5base_tags %}
-<!doctype html>
+{% load html5base_tags %}<!doctype html>
 <!--[if lt IE 7]> <html class="no-js ie6 oldie"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js ie7 oldie"> <![endif]-->
 <!--[if IE 8]>    <html class="no-js ie8 oldie"> <![endif]-->
@@ -10,52 +9,41 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 	<meta name="description" content="{%  block meta_desription %}{% endblock %}">
 	<meta name="keywords" content="{%  block meta_keywords %}{% endblock %}">
-
     {% google_webmaster %}
     {% yandex_webmaster %}
     {% alexa %}
-
 	<title>{% block meta_title %}{% endblock %}</title>
-
 	<meta name="generator" content="Django engine">
 	<meta name="robots" content="index, follow">
 	<meta name="googlebot" content="index, follow">
 	<meta name="rating" content="General">
-
 	<link rel="shortcut icon" href="{{ STATIC_URL }}html5base/img/favicon.ico">
 	<link rel="apple-touch-icon" href="{{ STATIC_URL }}html5base/img/apple-touch-icon.png">
-
-	<link rel="stylesheet" href="{{ STATIC_URL }}html5base/css/reset.css">
 	{% block stylesheets %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}html5base/css/reset.css">
 	{% endblock %}
-
-	<script src="{{ STATIC_URL }}html5base/js/modernizr.js"></script>
-	<!--[if (gte IE 6)&(lte IE 8)]>
+	{% block javascripts %}
+        <script src="{{ STATIC_URL }}html5base/js/modernizr.js"></script>
+        <script src="{{ STATIC_URL }}html5base/js/jquery.js"></script>
+	    <script src="{{ STATIC_URL }}html5base/js/swfobject.js"></script>
+	{% endblock %}
+    <!--[if (gte IE 6)&(lte IE 8)]>
 	<script src="{{ STATIC_URL }}html5base/js/nwmatcher.js"></script>
 	<script src="{{ STATIC_URL }}html5base/js/selectivizr.js"></script>
 	<![endif]-->
-	<script src="{{ STATIC_URL }}html5base/js/jquery.js"></script>
-	<script src="{{ STATIC_URL }}html5base/js/swfobject.js"></script>
-	{% block javascripts %}{% endblock %}
-
 	{% block htmladditional %}{% endblock %}
 </head>
-
 <body>
 {% block global_content %}{% endblock %}
-
 <!--[if lt IE 8 ]>
 <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
 <script>window.attachEvent('onload', function() {
 	CFInstall.check({mode:'overlay'})
 })</script>
 <![endif]-->
-
 {% google_analytics %}
 {% yandex_metrics %}
 </body>
-
 </html>
