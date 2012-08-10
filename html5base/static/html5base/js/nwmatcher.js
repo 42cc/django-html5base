@@ -1,13 +1,13 @@
 /*
- * Copyright (C) 2007-2011 Diego Perini
+ * Copyright (C) 2007-2012 Diego Perini
  * All rights reserved.
  *
  * nwmatcher.js - A fast CSS selector engine and matcher
  *
  * Author: Diego Perini <diego.perini at gmail com>
- * Version: 1.2.5beta
+ * Version: 1.2.5
  * Created: 20070722
- * Release: 20113007
+ * Release: 20120101
  *
  * License:
  *  http://javascript.nwbox.com/NWMatcher/MIT-LICENSE
@@ -17,7 +17,7 @@
 
 (function(global) {
 
-  var version = 'nwmatcher-1.2.5beta',
+  var version = 'nwmatcher-1.2.5',
 
   // export the public API for CommonJS implementations,
   // for headless JS engines or for standard web browsers
@@ -50,20 +50,20 @@
   lastPartsMatch,
   lastPartsSelect,
 
-  // prefix identifier (id, class & pseudo-class)
+  // accepted prefix identifiers
+  // (id, class & pseudo-class)
   prefixes = '[#.:]?',
 
-  // attributes operators
-  // ! invalid but compat !
+  // accepted attribute operators
   operators = '([~*^$|!]?={1})',
 
-  // whitespace characters
+  // accepted whitespace characters
   whitespace = '[\\x20\\t\\n\\r\\f]*',
 
   // 4 combinators F E, F>E, F+E, F~E
   combinators = '[\\x20]|[>+~][^>+~]',
 
-  // an+b format params for psuedo-classes
+  // an+b format params for pseudo-classes
   pseudoparms = '[-+]?\\d*n?[-+]?\\d*',
 
   // CSS quoted string values
@@ -297,7 +297,6 @@
   BUGGY_QUIRKS_QSAPI,
 
   QUIRKS_MODE,
-  TO_UPPER_CASE,
   XML_DOCUMENT,
 
   // detect Opera browser
@@ -358,6 +357,7 @@
       return pattern.length ?
         new RegExp(pattern.join('|')) :
         { 'test': function() { return false; } };
+
     })() :
     true,
 
@@ -377,7 +377,8 @@
 
   // boolean attributes should return attribute name instead of true/false
   ATTR_BOOLEAN = {
-    checked: 1, disabled: 1, ismap: 1, multiple: 1, readonly: 1, selected: 1
+    'checked': 1, 'disabled': 1, 'ismap': 1,
+    'multiple': 1, 'readonly': 1, 'selected': 1
   },
 
   // dynamic attributes that needs to be checked against original HTML value
@@ -497,8 +498,9 @@
   concatCall =
     function(data, elements, callback) {
       var i = -1, element;
-      while ((element = elements[++i]))
-        callback(data[data.length] = element);
+      while ((element = elements[++i])) {
+        if (false === callback(data[data.length] = element)) { break; }
+      }
       return data;
     },
 
@@ -508,15 +510,13 @@
       var div, oldDoc = doc;
       // save passed context
       lastContext = from;
-      // reference context ownerDocument and document root (HTML)
+      // set new context document
       doc = from.ownerDocument || from;
       if (force || oldDoc !== doc) {
         // set document root
         root = doc.documentElement;
         // set host environment flags
         XML_DOCUMENT = doc.createElement('DiV').nodeName == 'DiV';
-        // used when nodeName comparisons need to be uppercased
-        TO_UPPER_CASE = XML_DOCUMENT ? '.toUpperCase()' : '';
 
         // In quirks mode css class names are case insensitive.
         // In standards mode they are case sensitive. See docs:
@@ -734,8 +734,6 @@
     } :
     function(node, attribute) {
       attribute = attribute.toLowerCase();
-      // older IE engines requires DOM mapping
-      // see NetFront/Playstation as an example
       if (ATTR_DEFAULT[attribute]) {
         return !!node[ATTR_DEFAULT[attribute]];
       }
@@ -746,6 +744,7 @@
     },
 
   // check node emptyness
+  // @return boolean
   isEmpty =
     function(node) {
       node = node.firstChild;
@@ -809,27 +808,19 @@
   // control user notifications
   emit =
     function(message) {
+      message = 'SYNTAX_ERR: ' + message + ' ';
       if (Config.VERBOSITY) {
         // FF/Safari/Opera DOMException.SYNTAX_ERR = 12
         if (typeof global.DOMException != 'undefined') {
-          var err = new Error();
-          err.message = 'SYNTAX_ERR: (Selectors) ' + message;
-          err.code = 12;
-          throw err;
+          throw { code: 12, message: message };
         } else {
-          throw new Error(12, 'SYNTAX_ERR: (Selectors) ' + message);
+          throw new Error(12, message);
         }
       } else {
-        var console = global.console;
-        if (console && console.log) {
-          console.log(message);
+        if (global.console && global.console.log) {
+          global.console.log(message);
         } else {
-          if (/exception/i.test(message)) {
-            global.status = message;
-            global.defaultStatus = message;
-          } else {
-            global.status += message;
-          }
+          global.status += message;
         }
       }
     },
@@ -861,9 +852,8 @@
 
   /*---------------------------- COMPILER METHODS ----------------------------*/
 
-  // do not change this, it is searched & replaced
-  // in multiple places to build compiled functions
-  ACCEPT_NODE = 'f&&f(c[k]);r[r.length]=c[k];continue main;',
+  // code string reused to build compiled functions
+  ACCEPT_NODE = 'r[r.length]=c[k];if(f&&false===f(c[k]))break;else continue main;',
 
   // compile a comma separated group of selector
   // @mode boolean true for select, false for match
@@ -872,6 +862,9 @@
     function(selector, source, mode) {
 
       var parts = typeof selector == 'string' ? selector.match(reSplitGroup) : selector;
+
+      // ensures that source is a string
+      typeof source == 'string' || (source = '');
 
       if (parts.length == 1) {
         source += compileSelector(parts[0], mode ? ACCEPT_NODE : 'f&&f(k);return true;');
@@ -936,7 +929,7 @@
           // both tagName and nodeName properties may be upper/lower case
           // depending on their creation NAMESPACE in createElementNS()
           source = 'if(e.nodeName' + (XML_DOCUMENT ?
-            '=="' + match[1] + '"' : TO_UPPER_CASE +
+            '=="' + match[1] + '"' : '.toUpperCase()' +
             '=="' + match[1].toUpperCase() + '"') +
             '){' + source + '}';
         }
@@ -1297,6 +1290,13 @@
       return matchResolvers[selector](element, Snapshot, [ ], doc, root, from, callback);
     },
 
+  // select only the first element
+  // matching selector (document ordered)
+  first =
+    function(selector, from) {
+      return select(selector, from, function() { return false; })[0] || null;
+    },
+
   // select elements matching selector
   // using new Query Selector API
   // or cross-browser client API
@@ -1313,7 +1313,9 @@
         emit('Empty selector string');
         return [ ];
       } else if (typeof selector != 'string') {
-        // QSA capable browsers do not throw
+        return [ ];
+      } else if (from && !(/1|9|11/).test(from.nodeType)) {
+        emit('Invalid context element');
         return [ ];
       } else if (lastContext !== from) {
         // reset context data when it changes
@@ -1440,8 +1442,8 @@
 
         else if ((parts = selector.match(Optimize.CLASS)) && (token = parts[1])) {
           if ((elements = _byClass(token, from)).length === 0) { return [ ]; }
-          for (var z = 0, els = [ ]; elements.length > z; ++z) {
-            els = concatList(els, elements[z].getElementsByTagName('*'));
+          for (i = 0, els = [ ]; elements.length > i; ++i) {
+            els = concatList(els, elements[i].getElementsByTagName('*'));
           }
           elements = els;
           if (reOptimizeSelector.test(selector.charAt(selector.indexOf(token) - 1))) {
@@ -1528,6 +1530,9 @@
 
   /*------------------------------- PUBLIC API -------------------------------*/
 
+  // code referenced by extensions
+  Dom.ACCEPT_NODE = ACCEPT_NODE;
+
   // log resolvers errors/warnings
   Dom.emit = emit;
 
@@ -1553,6 +1558,9 @@
 
   // element match selector, return boolean true/false
   Dom.match = match;
+
+  // first element match only, return element or null
+  Dom.first = first;
 
   // elements matching selector, starting from element
   Dom.select = select;
