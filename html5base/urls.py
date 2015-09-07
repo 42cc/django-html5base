@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
+from django.views.generic import TemplateView
 
-urlpatterns = patterns('django.views.generic.simple',
-    (r'crossdomain.xml', 'direct_to_template', {'template': 'html5base/crossdomain.xml'}),
-    (r'robots.txt', 'direct_to_template', {'template': 'html5base/robots.txt'}),
+urlpatterns = patterns('',
+    (r'crossdomain.xml', TemplateView.as_view(template_name="html5base/crossdomain.xml")),
+    (r'robots.txt', TemplateView.as_view(template_name="html5base/robots.txt")),
 )
